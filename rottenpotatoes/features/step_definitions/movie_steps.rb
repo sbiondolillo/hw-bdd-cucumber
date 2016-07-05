@@ -17,8 +17,7 @@ end
 
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   #  ensure that that e1 occurs before e2.
-  #  page.body is the entire content of the page as a string.
-  fail "Unimplemented"
+  expect(page.body.index(e1)).to be < page.body.index(e2)
 end
 
 # Make it easier to express checking or unchecking several boxes at once
@@ -33,17 +32,13 @@ When /I check the following ratings: (.*)/ do |fields|
 end
 
 When /I uncheck the following ratings: (.*)/ do |fields|
-  # HINT: use String#split to split up the rating_list, then
   unselected = fields.split(",")
-  #   iterate over the ratings and reuse the "When I check..." or
-  #   "When I uncheck..." steps in lines 89-95 of web_steps.rb
   unselected.each do |field|
     uncheck("ratings_#{field}")
   end
 end
 
 Then /I should see all the movies/ do
-  # Make sure that all the movies in the app are visible in the table
   rows = page.all('table#movies tr').count
   expect(rows).to eq 11
 end
